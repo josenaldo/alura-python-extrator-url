@@ -1,17 +1,7 @@
-#  Minha implementação
-url = 'https://bytebank.com/cambio?moedaOrigem=real&moedaDestino=dolar&quantidade=100'
-print(url)
 
-question_index = url.index('?')
-
-base = url[0:question_index]
-parametros = url[question_index+1:len(url)]
-
-print(f'PATH: {base}')
-print(f'QUERY: {parametros}')
 
 # Implementação inicial da Alura
-url = "bytebank.com/cambio?moedaOrigem=real"
+url = "bytebank.com/cambio?quantidade=100&moedaOrigem=real&moedaDestino=dolar"
 print(url)
 
 indice_interrogacao = url.find('?')
@@ -23,3 +13,14 @@ print(url_base)  # Vai imprimir “bytebank.com/cambio”
 # quando o segundo argumento do slice não é passado, o python entende que pegar até o fim da string
 url_parametros = url[indice_interrogacao+1:]
 print(url_parametros)
+
+parametro_busca = 'quantidade'
+indice_parametro = url_parametros.find(parametro_busca)
+indice_valor = indice_parametro + len(parametro_busca) + 1
+
+indice_e_comercial = url_parametros.find('&', indice_valor)
+if indice_e_comercial == -1:
+    valor = url_parametros[indice_valor:]
+else:
+    valor = url_parametros[indice_valor:indice_e_comercial]
+print(valor)
