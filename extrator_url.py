@@ -11,6 +11,22 @@ class ExtratorURL:
     def __str__(self):
         return self.url
 
+    def __len__(self):
+        return len(self.url)
+
+    def __eq__(self, other):
+        return self.url == other.url
+
+    def get_relatorio_da_url(self):
+        saida = f'URL: {self}\n'
+        saida += f'Tamanho: {len(self)}\n'
+        saida += f'Parâmetros: \n'
+
+        for chave, valor in self.parametros.items():
+            saida += f'\t{chave}: {valor}\n'
+
+        return saida
+
     # noinspection PyMethodMayBeStatic
     def sanitiza_url(self, url):
         if not url:
@@ -59,11 +75,24 @@ class ExtratorURL:
         else:
             return None
 
+    def get_cambio(self):
 
+
+
+# nova_url = "bytebank.com/cambio?quantidade=100&moedaOrigem=dolar&moedaDestino=real"
 nova_url = "bytebank.com/cambio?quantidade=100&moedaOrigem=real&moedaDestino=dolar"
 extrator_url = ExtratorURL(nova_url)
+extrator_url_2 = ExtratorURL(nova_url)
+
+print(f'URL: {extrator_url}')
+print(f'Tamanho da URL: {len(extrator_url)}')
+print("extrator_url == extrator_url_2? ", extrator_url == extrator_url_2)
+
 valor_quantidade = extrator_url.get_valor_parametro("quantidade")
-print(valor_quantidade)
+print(f'Valor do parâmetro quantidade: {valor_quantidade}')
+
+print()
+print(f'Relatório completo:\n{extrator_url.get_relatorio_da_url()}')
 
 url_validas = [
     'bytebank.com/cambio',
@@ -95,3 +124,19 @@ for invalida in url_invalidas:
         print(f'Essa URL não deveria ser impressa: {extrator}')
     except ValueError as error:
         print(f'Erro corretamente encontrado: {error}')
+
+VALOR_DOLAR = 5.50  # 1 dólar = 5.50 reais
+moeda_origem = extrator_url.get_valor_parametro("moedaOrigem")
+moeda_destino = extrator_url.get_valor_parametro("moedaDestino")
+quantidade = float(extrator_url.get_valor_parametro("quantidade"))
+
+if moeda_destino == 'real':
+    valor_destino = quantidade * VALOR_DOLAR
+    simbolo_moeda_destino = 'R$'
+    simbolo_moeda_origem = '$'
+else:
+    valor_destino = quantidade / VALOR_DOLAR
+    simbolo_moeda_destino = '$'
+    simbolo_moeda_origem = 'R$'
+
+print(f'{simbolo_moeda_origem} {quantidade:.2f} = {simbolo_moeda_destino} {valor_destino:.2f}')
